@@ -1,6 +1,7 @@
 package com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.controller;
 
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.exception.FreelancerNotFoundException;
+import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.hateoas.FreelancerResourceAssembler;
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.model.Freelancer;
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.repository.FreelancerRepository;
 import org.springframework.hateoas.Resource;
@@ -24,10 +25,12 @@ public class FreelancerController {
 
 
     private final FreelancerRepository repository;
+    private final FreelancerResourceAssembler assembler;
 
     // FreelancerRepository is injected by constructor into the controller.
-    public FreelancerController(FreelancerRepository repository) {
+    public FreelancerController(FreelancerRepository repository, FreelancerResourceAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler; // To leverage this assembler, you only have to alter the EmployeeController by injecting the assembler
     }
 
     // Aggregate root
@@ -37,11 +40,9 @@ public class FreelancerController {
 //        return repository.findAll();
 //    }
     @GetMapping(path = "/freelancers", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
-    Resources<Resource<Freelancer>> all(){
+    public Resources<Resource<Freelancer>> all(){
         List<Resource<Freelancer>> freelancers = repository.findAll().stream()
-                .map(freelancer -> new Resource<>(freelancer,
-                        linkTo(methodOn(FreelancerController.class).one(freelancer.getId())).withSelfRel(),
-                        linkTo(methodOn(FreelancerController.class).all()).withRel("freelancers")))
+                .map(assembler::toResource)
                 .collect(Collectors.toList());
 
         return new Resources<>(freelancers,
@@ -68,14 +69,12 @@ public class FreelancerController {
     //linkTo(methodOn(EmployeeController.class).all()).withRel("employees") asks Spring HATEOAS to build a link to the aggregate root, all(), and call it "employees".
     //One of Spring HATEOAS’s core types is  Link. It includes a URI and a rel (relation). Links are what empower the web.
     @GetMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"} )
-    Resource<Freelancer> one(@PathVariable Long id) {
+    public Resource<Freelancer> one(@PathVariable Long id) {
 
         Freelancer freelancer = repository.findById(id)
                 .orElseThrow(() -> new FreelancerNotFoundException(id));
 
-        return new Resource<Freelancer>( freelancer,
-            linkTo(methodOn(FreelancerController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(FreelancerController.class).all()).withRel("freelancers"));
+        return assembler.toResource(freelancer);
     }
 
 
