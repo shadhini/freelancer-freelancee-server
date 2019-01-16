@@ -1,0 +1,24 @@
+Lombok annotation resolving
+------------------------------
+In order to solve the problem set:
+
+Preferences (Ctrl + Alt + S)
+Build, Execution, Deployment
+Compiler
+Annotation Processors
+Enable annotation processing
+Make sure you have the Lombok plugin for IntelliJ installed!
+
+Preferences -> Plugins
+Search for "Lombok Plugin"
+Click Browse repositories...
+Choose Lombok Plugin
+Install
+Restart IntelliJ
+
+
+
+
+---------------------------------------------
+
+tutorial: https://spring.io/guides/tutorials/rest/
