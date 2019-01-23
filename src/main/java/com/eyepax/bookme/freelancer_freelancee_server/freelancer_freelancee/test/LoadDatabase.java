@@ -18,12 +18,13 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class LoadDatabase {
 
-    @Bean
-    CommandLineRunner initDatabase(FreelancerRepository freelancerRepository){
 
+
+    @Bean
+    CommandLineRunner initSalonDataBase(FreelancerRepository freelancerRepository) {
         return args -> {
-            log.info("Preloading " + freelancerRepository.save(new Freelancer("Bilbo", "Baggins", "bilbo@eyepax")));
-            log.info("Preloading " + freelancerRepository.save(new Freelancer("Frodo", "Baggins", "frodo@eyepax.com")));
+            log.debug("Preloading " + freelancerRepository.save(new Freelancer("1", "Ted", "Williams", "ted.w@eyepax.com", "Los Angeles", "Hair Coloring, Hair Cutting, Layering")));
+            log.debug("Preloading " + freelancerRepository.save(new Freelancer("2","Bob", "Gibson", "bob.g@eyepax.com", "Houston", "Hair Coloring, Hair Cutting")));
         };
     }
 }

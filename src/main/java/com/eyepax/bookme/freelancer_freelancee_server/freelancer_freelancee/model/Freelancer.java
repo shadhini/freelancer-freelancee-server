@@ -1,14 +1,12 @@
 package com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.model;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.TermVector;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -18,9 +16,14 @@ import java.util.List;
 @Table(name = "Freelancer")
 public class Freelancer{
 
-    private @Id
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    String id; // JPA annotations to indicate it’s the primary key and automatically populated by the JPA provider.
+
     @GeneratedValue
-    Long id; // JPA annotations to indicate it’s the primary key and automatically populated by the JPA provider.
+    private String freelancer_id;
+
     @Field(termVector = TermVector.YES)
     private String firstName;
     @Field(termVector = TermVector.YES)
@@ -35,13 +38,8 @@ public class Freelancer{
     public Freelancer() {
     }
 
-    public Freelancer(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public Freelancer(String firstName, String lastName, String email, String city, String skills) {
+    public Freelancer(String id,  String firstName, String lastName, String email, String city, String skills) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

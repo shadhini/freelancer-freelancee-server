@@ -27,7 +27,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 // A critical ingredient to any RESTful service is adding links to relevant operations.
 
 // routes for each operations (@GetMapping, @PostMapping, @PutMapping and @DeleteMapping, corresponding to HTTP GET, POST, PUT, and DELETE calls)
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController // indicates that the data returned by each method will be written straight into the response body instead of rendering a template.
+@RequestMapping("/api")
 public class FreelancerController {
 
 
@@ -108,7 +110,7 @@ public class FreelancerController {
     //linkTo(methodOn(EmployeeController.class).all()).withRel("employees") asks Spring HATEOAS to build a link to the aggregate root, all(), and call it "employees".
     //One of Spring HATEOAS’s core types is  Link. It includes a URI and a rel (relation). Links are what empower the web.
     @GetMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"} )
-    public Resource<Freelancer> one(@PathVariable Long id) {
+    public Resource<Freelancer> one(@PathVariable String id) {
 
         Freelancer freelancer = repository.findById(id)
                 .orElseThrow(() -> new FreelancerNotFoundException(id));
@@ -123,7 +125,7 @@ public class FreelancerController {
     //
     //In REST, a resource’s id is the URI of that resource. Hence, Spring HATEOAS doesn’t hand you the id field of the underlying data type (which no client should), but instead, the URI for it. And don’t confuse ResourceSupport.getId() with Employee.getId().
     @PutMapping("/freelancers/{id}")
-    ResponseEntity<?> replaceFreelancer(@RequestBody Freelancer newFreelancer, @PathVariable Long id) throws URISyntaxException {
+    ResponseEntity<?> replaceFreelancer(@RequestBody Freelancer newFreelancer, @PathVariable String id) throws URISyntaxException {
 
         Freelancer updatedFreelancer = repository.findById(id)
                 .map(freelancer -> {
@@ -145,7 +147,7 @@ public class FreelancerController {
     }
 
     @DeleteMapping("/freelancers/{id}")
-    ResponseEntity<?> deleteFreelancer(@PathVariable Long id) {
+    ResponseEntity<?> deleteFreelancer(@PathVariable String id) {
         repository.deleteById(id);
 
         return ResponseEntity.noContent().build();

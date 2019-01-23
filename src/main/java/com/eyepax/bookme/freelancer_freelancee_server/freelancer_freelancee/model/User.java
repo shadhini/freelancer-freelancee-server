@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Data
 public abstract class User {
 
-    private @Id @GeneratedValue Long id; // JPA annotations to indicate it’s the primary key and automatically populated by the JPA provider.
+    private @Id @GeneratedValue String id; // JPA annotations to indicate it’s the primary key and automatically populated by the JPA provider.
     private String firstName;
     private String lastName;
     private String email;

@@ -14,7 +14,7 @@ import org.springframework.data.repository.CrudRepository;
 //Deleting
 //
 //Finding (one, all, by simple or complex properties)
-public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
+public interface FreelancerRepository extends JpaRepository<Freelancer, String> {
 
 
 }
