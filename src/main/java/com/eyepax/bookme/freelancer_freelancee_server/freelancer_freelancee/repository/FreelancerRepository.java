@@ -2,6 +2,7 @@ package com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.rep
 
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.model.Freelancer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 // This interface extends Spring Data JPA’s JpaRepository, specifying the domain type as Employee and the id type as Long
 // his interface, though empty on the surface, packs a punch given it supports:

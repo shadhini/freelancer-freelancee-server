@@ -1,0 +1,72 @@
+There is an old strategy that precedes REST by years.
+
+Never delete a column in a database.
+— Unknown
+You can always add columns (fields) to a database table. But don’t take one away. The principle in RESTful services is the same. Add new fields to your JSON representations, but don’t take any away. Like this:
+
+{
+  "id": 1,
+  "firstName": "Bilbo",
+  "lastName": "Baggins",
+  "role": "burglar",
+  "name": "Bilbo Baggins",
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/employees/1"
+    },
+    "employees": {
+      "href": "http://localhost:8080/employees"
+    }
+  }
+}
+Notice how this format shows firstName, lastName, AND name? While it sports duplication of information, the purpose is to support both old and new clients. That means you can upgrade the server without requiring clients upgrade at the same time. A good move that should reduce downtime.
+
+And not only should you show this information in both the "old way" and the "new way". You should also process incoming data both ways.
+
+How? Simple. Like this:
+
+Employee record that handles both "old" and "new" clients
+package payroll;
+
+import lombok.Data;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Data
+@Entity
+class Employee {
+
+	private @Id @GeneratedValue Long id;
+	private String firstName;
+	private String lastName;
+	private String role;
+
+	Employee(String firstName, String lastName, String role) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.role = role;
+	}
+
+	public String getName() {
+		return this.firstName + " " + this.lastName;
+	}
+
+	public void setName(String name) {
+		String[] parts =name.split(" ");
+		this.firstName = parts[0];
+		this.lastName = parts[1];
+	}
+}
+This class is very similar to the previous version of Employee. Let’s go over the changes:
+
+Field name has been replaced by firstName and lastName. Lombok will generate getters and setters for those.
+
+A "virtual" getter for the old name property, getName() is defined. It uses the firstName and lastName fields to produce a value.
+
+A "virtual" setter for the old name property is also defined, setName(). It parses an incoming string and stores it into the proper fields.
+
+Of course not EVERY change to your API is as simple as splitting a string or merging two strings. But it’s surely not impossible to come up with a set of transforms for most scenarios, ehh?
+
+

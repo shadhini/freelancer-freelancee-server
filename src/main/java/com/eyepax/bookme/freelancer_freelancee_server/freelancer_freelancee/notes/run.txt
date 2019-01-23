@@ -16,6 +16,9 @@ $ curl -X DELETE localhost:8080/employees/3
 $ curl localhost:8080/employees/3
 
 
+$ curl -v -X POST localhost:8080/employees -H 'Content-Type:application/json' -d '{"name": "Samwise Gamgee", "role": "gardener"}'
+$ curl -v -X PUT localhost:8080/employees/3 -H 'Content-Type:application/json' -d '{"name": "Samwise Gamgee", "role": "ring bearer"}'
+$ curl -v -X DELETE localhost:8080/employees/1
 
 ---------------------------------------------------------
 Spring MVC REST controller that actually produces hypermedia-powered content

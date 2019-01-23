@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 //This runner will request a copy of the EmployeeRepository you just created.
 //
 //Using it, it will create two entities and store them.
-//
+
 //@Slf4j is a Lombok annotation to autocreate an Slf4j-based  LoggerFactory as log, allowing us to log these newly created "freelancers".
 @Configuration
 @Slf4j
