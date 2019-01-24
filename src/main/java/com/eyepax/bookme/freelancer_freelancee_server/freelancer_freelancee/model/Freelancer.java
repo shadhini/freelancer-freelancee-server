@@ -21,9 +21,6 @@ public class Freelancer{
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     String id; // JPA annotations to indicate it’s the primary key and automatically populated by the JPA provider.
 
-    @GeneratedValue
-    private String freelancer_id;
-
     @Field(termVector = TermVector.YES)
     private String firstName;
     @Field(termVector = TermVector.YES)
