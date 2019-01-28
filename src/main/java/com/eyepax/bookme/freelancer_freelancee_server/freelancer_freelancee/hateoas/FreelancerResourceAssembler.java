@@ -16,7 +16,7 @@ public class FreelancerResourceAssembler implements ResourceAssembler<Freelancer
     @Override
     public Resource<Freelancer> toResource(Freelancer freelancer) {
         return new Resource<>(freelancer,
-                linkTo(methodOn(FreelancerController.class).one(freelancer.getId())).withSelfRel(),
+                linkTo(methodOn(FreelancerController.class).getFreelancer(freelancer.getUsername())).withSelfRel(),
                 linkTo(methodOn(FreelancerController.class).all()).withRel("freelancers"));
     }
 }

@@ -48,20 +48,25 @@ public class FreelancerServiceImpl implements FreelancerService {
 
     @Override
     public void addFreelancer() {
-        TedWilliams.setFirstName("Ted");
-        TedWilliams.setLastName("Williams");
-        TedWilliams.setEmail("ted.w@eyepax.com");
-        TedWilliams.setCity("Los Angeles");
-        TedWilliams.setSkills("Hair Coloring, Hair Cutting, Layering");
-
-
-
-        BobGibson.setFirstName("Bob");
-        BobGibson.setLastName("Gibson");
-        BobGibson.setEmail("bob.g@eyepax.com");
-        BobGibson.setCity("Houston");
-        BobGibson.setSkills("Hair Coloring, Hair Cutting");
 
     }
+
+//    @Override
+//    public void addFreelancer() {
+//        TedWilliams.setName("Ted");
+//        TedWilliams.setLastName("Williams");
+//        TedWilliams.setEmail("ted.w@eyepax.com");
+//        TedWilliams.setCity("Los Angeles");
+//        TedWilliams.setSkills("Hair Coloring, Hair Cutting, Layering");
+//
+//
+//
+//        BobGibson.setName("Bob");
+//        BobGibson.setLastName("Gibson");
+//        BobGibson.setEmail("bob.g@eyepax.com");
+//        BobGibson.setCity("Houston");
+//        BobGibson.setSkills("Hair Coloring, Hair Cutting");
+//
+//    }
 
 }

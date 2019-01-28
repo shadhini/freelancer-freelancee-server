@@ -3,8 +3,9 @@ package com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.exc
 // an exception used to indicate when an employee is looked up but not found.
 public class FreelancerNotFoundException extends RuntimeException{
 
-    public FreelancerNotFoundException(String id) {
-        super("Could not find freelancer " + id);
+    public FreelancerNotFoundException(String freelancer) {
+        super("Could not find freelancer " + freelancer);
     }
+
 
 }

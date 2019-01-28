@@ -4,14 +4,11 @@ import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.exce
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.hateoas.FreelancerResourceAssembler;
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.model.Freelancer;
 import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.repository.FreelancerRepository;
-import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.service.FreelancerService;
-import com.eyepax.bookme.freelancer_freelancee_server.freelancer_freelancee.service.HibernateSearchService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -36,28 +33,26 @@ public class FreelancerController {
     private final FreelancerRepository repository;
     private final FreelancerResourceAssembler assembler;
 
-    @Autowired
-    private HibernateSearchService searchservice;
+//    @Autowired
+//    private HibernateSearchService searchservice;
 
-    @Autowired
-    private FreelancerService freelancerService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String search(@RequestParam(value = "search", required = false) String q, Model model) {
-        List<Freelancer> searchResults = null;
-        try {
-            freelancerService.addFreelancer();
-            searchResults = searchservice.fuzzySearch(q);
-
-        } catch (Exception ex) {
-            // here you should handle unexpected errors
-            // ...
-            // throw ex;
-        }
-        model.addAttribute("search", searchResults);
-        return "index";
-
-    }
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public String search(@RequestParam(value = "search", required = false) String q, Model model) {
+//        List<Freelancer> searchResults = null;
+//        try {
+//            freelancerService.addFreelancer();
+//            searchResults = searchservice.fuzzySearch(q);
+//
+//        } catch (Exception ex) {
+//            // here you should handle unexpected errors
+//            // ...
+//            // throw ex;
+//        }
+//        model.addAttribute("search", searchResults);
+//        return "index";
+//
+//    }
 
 
     // FreelancerRepository is injected by constructor into the controller.
@@ -109,14 +104,14 @@ public class FreelancerController {
     //
     //linkTo(methodOn(EmployeeController.class).all()).withRel("employees") asks Spring HATEOAS to build a link to the aggregate root, all(), and call it "employees".
     //One of Spring HATEOAS’s core types is  Link. It includes a URI and a rel (relation). Links are what empower the web.
-    @GetMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"} )
-    public Resource<Freelancer> one(@PathVariable String id) {
-
-        Freelancer freelancer = repository.findById(id)
-                .orElseThrow(() -> new FreelancerNotFoundException(id));
-
-        return assembler.toResource(freelancer);
-    }
+//    @GetMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"} )
+//    public Resource<Freelancer> one(@PathVariable String id) {
+//
+//        Freelancer freelancer = repository.findById(id)
+//                .orElseThrow(() -> new FreelancerNotFoundException(id));
+//
+//        return assembler.toResource(freelancer);
+//    }
 
 
     // The Employee object built from the save() operation is then wrapped using the EmployeeResourceAssembler into a Resource<Employee> object. Since we want a more detailed HTTP response code than 200 OK, we will use Spring MVC’s ResponseEntity wrapper. It has a handy static method created() where we can plug in the resource’s URI.
@@ -124,14 +119,22 @@ public class FreelancerController {
     //By grabbing the resource you can fetch it’s "self" link via the getId() method call. This method yields a Link which you can turn into a Java URI. To tie things up nicely, you inject the resource itself into the body() method.
     //
     //In REST, a resource’s id is the URI of that resource. Hence, Spring HATEOAS doesn’t hand you the id field of the underlying data type (which no client should), but instead, the URI for it. And don’t confuse ResourceSupport.getId() with Employee.getId().
-    @PutMapping("/freelancers/{id}")
+    @PutMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     ResponseEntity<?> replaceFreelancer(@RequestBody Freelancer newFreelancer, @PathVariable String id) throws URISyntaxException {
 
         Freelancer updatedFreelancer = repository.findById(id)
                 .map(freelancer -> {
-                    freelancer.setFirstName(newFreelancer.getFirstName());
-                    freelancer.setLastName(newFreelancer.getLastName());
+                    freelancer.setName(newFreelancer.getName());
                     freelancer.setEmail(newFreelancer.getEmail());
+                    freelancer.setCity(newFreelancer.getCity());
+                    freelancer.setContactNo(newFreelancer.getContactNo());
+                    freelancer.setCurrentJobTitle(newFreelancer.getCurrentJobTitle());
+                    freelancer.setDescription(newFreelancer.getDescription());
+                    freelancer.setExperience(newFreelancer.getExperience());
+                    freelancer.setGender(newFreelancer.getGender());
+                    freelancer.setRatePerHour(newFreelancer.getRatePerHour());
+                    freelancer.setSkills(newFreelancer.getSkills());
+                    freelancer.setTagLine(newFreelancer.getTagLine());
                     return repository.save(freelancer);
                 })
                 .orElseGet(() -> {
@@ -146,10 +149,19 @@ public class FreelancerController {
                 .body(resource);
     }
 
-    @DeleteMapping("/freelancers/{id}")
+    @DeleteMapping(path = "/freelancers/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     ResponseEntity<?> deleteFreelancer(@PathVariable String id) {
         repository.deleteById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping(path = "/freelancers/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+    public  Resource<Freelancer> getFreelancer(@PathVariable(value = "username") String username) {
+        Freelancer freelancer = repository.findByUsername(username)
+                .orElseThrow(() -> new FreelancerNotFoundException(username));
+
+        return assembler.toResource(freelancer);
     }
 }
